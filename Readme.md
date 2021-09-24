@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Нина Стафеева](https://up.htmlacademy.ru/javascript/24/user/1797575).
-* Наставник: [Денис Байдаров] (https://htmlacademy.ru/profile/4er).
+* Наставник: [Денис Байдаров](https://htmlacademy.ru/profile/4er).
 
 ---
 
