@@ -3,6 +3,16 @@ https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Ma
 https://learn.javascript.ru/number
 https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array
 */
+const MIN_PRICE = 1000;
+const MAX_PRICE = 30000;
+const MAX_ROOMS = 5;
+const MAX_GUESTS = 10;
+const LAT_MIN = 35.65000;
+const LAT_MAX = 35.70000;
+const LNG_MIN = 139.70000;
+const LNG_MAX = 139.80000;
+const COMMA_OUT = 5;
+const COUNT_OFFER = 10;
 
 const AVATARS = [
   'img/avatars/user01.png',
@@ -30,9 +40,6 @@ const TITLES = [
   'Хорошее вариант для семей с детьми',
 ];
 
-const MIN_PRICE = 1000;
-const MAX_PRICE = 30000;
-
 const TYPES = [
   'palace',
   'flat',
@@ -41,8 +48,6 @@ const TYPES = [
   'hotel',
 ];
 
-const MAX_ROOMS = 5;
-const MAX_GUESTS = 10;
 const CHECKIN = ['12:00', '13:00', '14:00'];
 const CHECKOUT = ['12:00', '13:00', '14:00'];
 
@@ -97,20 +102,20 @@ const getRandomFloatRange = function (min, max, fraction) {
 
 //Функция для создания массива случайной длины из заданных значений.
 
-function getArray (elements) {
+function getRandomArray (elements) {
   const maxLength = elements.length;
   const lengthArray = getRandomIntRange(1, maxLength);
-  const ARRAY = [];
+  const array = [];
 
-  while (ARRAY.length < lengthArray) {
+  while (array.length < lengthArray) {
     const indexElement = getRandomIntRange(0, maxLength - 1);
     const el = elements[indexElement];
 
-    if (!ARRAY.includes(el)) {
-      ARRAY.push(el);
+    if (!array.includes(el)) {
+      array.push(el);
     }
   }
-  return ARRAY;
+  return array;
 }
 
 // Функция поиска случайного элемента в переданном массиве.
@@ -118,33 +123,34 @@ function getArray (elements) {
 const getRandomArrayElement = (elements) => elements[getRandomIntRange(0, elements.length - 1)];
 
 const createAdvertisement = () => {
-  const locationLat = getRandomFloatRange (35.65000, 35.70000, 5);
-  const locationLng = getRandomFloatRange (139.70000, 139.80000, 5);
+  const locationRandomLat = getRandomFloatRange (LAT_MIN, LAT_MAX, COMMA_OUT);
+  const locationRandomLng = getRandomFloatRange (LNG_MIN, LNG_MAX, COMMA_OUT);
   return {
-    autor: getRandomArrayElement(AVATARS),
+    author: {
+      avatar: getRandomArrayElement(AVATARS),
+    },
     offer: {
       title: getRandomArrayElement(TITLES),
-      address: String(`${locationLat}, ${locationLng}`),
+      address: String(`${locationRandomLat}, ${locationRandomLng}`),
       price: getRandomIntRange(MIN_PRICE, MAX_PRICE),
       type: getRandomArrayElement(TYPES),
       rooms: getRandomIntRange(1, MAX_ROOMS),
       guests: getRandomIntRange(1, MAX_GUESTS),
       checkin: getRandomArrayElement(CHECKIN),
       checkout: getRandomArrayElement(CHECKOUT),
-      features: getArray(FEATURES),
+      features: getRandomArray(FEATURES),
       description: getRandomArrayElement(DESCRIPTIONS),
-      photos: getArray(PHOTOS),
+      photos: getRandomArray(PHOTOS),
     },
     location: {
-      lat: locationLat,
-      lng: locationLng,
+      lat: locationRandomLat,
+      lng: locationRandomLng,
     },
   };
 };
 
 // Генерация массива заданной длины.
 
-const COUNT_OFFER = 10;
 const similarAdvertisement = Array.from({length: COUNT_OFFER}, createAdvertisement);
 
 similarAdvertisement(); // Временный вызов.
