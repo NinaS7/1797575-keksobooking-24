@@ -125,6 +125,6 @@ const createAdvertisement = () => {
 
 // Генерация массива заданной длины.
 
-const similarAdvertisement = Array.from({length: COUNT_OFFER}, createAdvertisement);
+const similarAdvertisements = Array.from({length: COUNT_OFFER}, createAdvertisement);
 
-export {similarAdvertisement};
+export {similarAdvertisements};
