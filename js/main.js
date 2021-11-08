@@ -1,5 +1,8 @@
 import {similarAdvertisements} from './data.js';
 import './popup.js';
-import {similarListElement, popupTemplate} from './popup.js';
-similarListElement; // Временно!
+import {popupTemplate} from './popup.js';
+import {getPageDisabled, getPageActive} from './form.js';
+
 popupTemplate(similarAdvertisements[2]);
+getPageDisabled();
+getPageActive();
