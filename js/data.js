@@ -34,7 +34,7 @@ const TITLES = [
   'Предложение от агенства недвижимости "Cити"',
   'Возможно размещение с животными',
   'Отличное предложение',
-  'Хорошее вариант для семей с детьми',
+  'Хороший вариант для семей с детьми',
 ];
 
 const TYPES = [
@@ -125,6 +125,6 @@ const createAdvertisement = () => {
 
 // Генерация массива заданной длины.
 
-const similarAdvertisement = Array.from({length: COUNT_OFFER}, createAdvertisement);
+const similarAdvertisements = Array.from({length: COUNT_OFFER}, createAdvertisement);
 
-export {similarAdvertisement};
+export {similarAdvertisements};
