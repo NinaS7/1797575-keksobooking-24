@@ -52,26 +52,36 @@ titleInput.addEventListener('input', () => {
   titleInput.setCustomValidity('');
   if (titleInput.value.length < MIN_TITLE_LENGTH) {
     titleInput.setCustomValidity(`Заголовок должен состоять минимум из ${MIN_TITLE_LENGTH} символов`);
-  } else
-  if (titleInput.value.length > MAX_TITLE_LENGTH) {
+  } if (titleInput.value.length > MAX_TITLE_LENGTH) {
     titleInput.setCustomValidity(`Заголовок не должен превышать ${MAX_TITLE_LENGTH} символов`);
   }
   titleInput.reportValidity();
 });
 
+const getMinPrice = () => {
+  price.min = MIN_PRICE_TYPES[type.value];
+  price.placeholder = MIN_PRICE_TYPES[type.value];
+};
+
+type.addEventListener('change', getMinPrice);
+
 type.addEventListener('change', () => {
-  const getMinPrice = () => {
-    price.min = MIN_PRICE_TYPES[type.value];
-    price.placeholder = MIN_PRICE_TYPES[type.value];
-  };
   price.setCustomValidity('');
   if (Number(price.value) < Number(MIN_PRICE_TYPES[type.value])) {
     price.setCustomValidity(`Минимальная цена для выбранного типа жилья должна быть не менее ${MIN_PRICE_TYPES[type.value]} ₽/ночь`);
-  } else
-  if (Number(price.value) > Number(price.max)) {
+  } if (Number(price.value) > Number(price.max)) {
     price.setCustomValidity(`Цена не должна превышать ${price.max}`);
   }
-  getMinPrice();
+  price.reportValidity();
+});
+
+price.addEventListener('input', () => {
+  price.setCustomValidity('');
+  if (Number(price.value) < Number(MIN_PRICE_TYPES[type.value])) {
+    price.setCustomValidity(`Минимальная цена для выбранного типа жилья должна быть не менее ${MIN_PRICE_TYPES[type.value]} ₽/ночь`);
+  } if (Number(price.value) > Number(price.max)) {
+    price.setCustomValidity(`Цена не должна превышать ${price.max}`);
+  }
   price.reportValidity();
 });
 
@@ -79,8 +89,7 @@ roomNumber.addEventListener('change', () => {
   roomNumber.setCustomValidity('');
   if (Number(roomNumber.value) < Number(capacity.value)) {
     roomNumber.setCustomValidity('Количество комнат должно быть не менее количества гостей');
-  } else
-  if (Number(roomNumber.value) === MAX_ROOMS && Number(capacity.value) !== 0) {
+  } if (Number(roomNumber.value) === MAX_ROOMS && Number(capacity.value) !== 0) {
     capacity.setCustomValidity('Вы выбрали вариант недвижимости "не для гостей"');
   }
   roomNumber.reportValidity();
@@ -90,8 +99,7 @@ capacity.addEventListener('change', () => {
   capacity.setCustomValidity('');
   if (Number(capacity.value) > Number(roomNumber.value)) {
     capacity.setCustomValidity('Количество гостей должно быть не более количества комнат');
-  } else
-  if (Number(capacity.value) === 0 && Number(roomNumber.value) !== MAX_ROOMS) {
+  } if (Number(capacity.value) === 0 && Number(roomNumber.value) !== MAX_ROOMS) {
     capacity.setCustomValidity('Укажите количество гостей');
   }
   capacity.reportValidity();
