@@ -63,10 +63,9 @@ const getMinPrice = () => {
   price.placeholder = MIN_PRICE_TYPES[type.value];
 };
 
-type.addEventListener('change', getMinPrice);
-
 type.addEventListener('change', () => {
   price.setCustomValidity('');
+  getMinPrice();
   if (Number(price.value) < Number(MIN_PRICE_TYPES[type.value])) {
     price.setCustomValidity(`Минимальная цена для выбранного типа жилья должна быть не менее ${MIN_PRICE_TYPES[type.value]} ₽/ночь`);
   } if (Number(price.value) > Number(price.max)) {
