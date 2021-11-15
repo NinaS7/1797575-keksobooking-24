@@ -11,10 +11,7 @@ const typePlaces = {
   hotel: 'Отель',
 };
 
-const similarListElement = document.querySelector('.map__canvas');
 const similarAdTemplate = document.querySelector('#card').content.querySelector('.popup');
-
-const similarListFragment = document.createDocumentFragment();
 
 const popupTemplate = (popup) => {
   const adElement = similarAdTemplate.cloneNode(true);
@@ -54,10 +51,7 @@ const popupTemplate = (popup) => {
     img.height = PHOTO_HEIGHT;
     popupPhotos.appendChild(img);
   });
-
-  similarListFragment.appendChild(adElement);
-
-  similarListElement.appendChild(similarListFragment);
+  return adElement;
 };
 
-export {similarListElement, popupTemplate};
+export {popupTemplate};
