@@ -1,7 +1,7 @@
 import { popupTemplate } from './popup.js';
 import { adForm, getPageActive} from './form.js';
 
-const ZOOM = 10;
+const ZOOM = 12;
 const COMMA_OUT = 5;
 
 const START_LOCATION = {
@@ -25,8 +25,8 @@ const inputAddress = adForm.querySelector('#address');
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    getPageActive();
     inputAddress.value = `${START_LOCATION.lat},${START_LOCATION.lng}`;
+    getPageActive();
   })
   .setView( START_LOCATION, ZOOM);
 
