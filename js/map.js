@@ -56,6 +56,8 @@ mainPinMarker.on('moveend', (evt) => {
 
 const markerGroup = L.layerGroup().addTo(map);
 
+const clearMarkerGroup = () => markerGroup.clearLayers();
+
 const createMarker = (points) => {
   points.forEach((point) => {
     const { lat, lng } = point.location;
@@ -81,4 +83,4 @@ const clearMap = () => {
   map.closePopup();
 };
 
-export { clearMap, createMarker};
+export { clearMap, createMarker, clearMarkerGroup};

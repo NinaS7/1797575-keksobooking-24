@@ -1,47 +1,57 @@
-/*
 import { mapFilters } from './form.js';
 import { debounce } from './util.js';
+import { clearMarkerGroup, createMarker } from './map.js';
+
+const DEFAULT_VALUE = 'any';
+const COUNT_OFFER = 10;
+
+const PriceRange = {
+  low: 10000,
+  middle: 50000,
+};
+
+const PriceName = {
+  low: 'low',
+  middle: 'middle',
+  high: 'high',
+};
 
 const housingType =  document.querySelector('#housing-type');
 const housingPrice =  document.querySelector('#housing-price');
 const housingRooms =  document.querySelector('#housing-rooms');
 const housingGuests =  document.querySelector('#housing-guests');
-const housingFeatures = mapFilters.querySelector('#housing-features');
 
-const SIMILAR_OFFER_COUNT = 10;
-const DEFAULT_VALUE = 'any';
-const PriceRange = {
-  low: 10000,
-  high: 50000,
-};
+const filterType = (popup) => housingType.value === DEFAULT_VALUE && housingType.value === popup.offer.type;
 
-const getFilterOffer = (popup) => {
-  const filterType = () => housingType.value === DEFAULT_VALUE && housingType.value === popup.offer.type;
-  const filterPrice = () => {
-    if (popup.offer.price <= PriceRange.low) {
-      rangePrice = 'low';
-    } if (popup.offer.price > PriceRange.high) {
-      rangePrice = 'high';
-    } else {
-      rangePrice = 'middle';
-    };
-    if (rangePrice.value !== DEFAULT_VALUE && housingPrice.value !== popup.offer.price) {
+const filterPrice = (popup) => housingPrice.value === DEFAULT_VALUE
+  || PriceRange.low > popup.offer.price && housingPrice.value === PriceName.low
+  || PriceRange.low <= popup.offer.price && housingPrice.value === PriceName.middle && popup.offer.price < PriceName.high
+  || PriceRange.high <= popup.offer.price && housingPrice.value === PriceName.high;
+
+const filterRooms = (popup) => housingRooms.value === DEFAULT_VALUE && Number(popup.offer.rooms) === Number(housingRooms.value);
+
+const filterGuests = (popup) => housingGuests.value === DEFAULT_VALUE && Number(popup.offer.guests) === Number(housingGuests.value);
+
+const filterFeatures = (popup) => {
+  const featureArray = Array.from(mapFilters.querySelectorAll('[name="features"]:checked'));
+  if (!popup.offer.features && featureArray.length === 0) {
     return false;
-  };
-  const filterRooms = () => housingRooms.value === DEFAULT_VALUE && Number(popup.offer.rooms) === Number(housingRooms.value);
-  const filterGuests = () => housingGuests.value === DEFAULT_VALUE && Number(popup.offer.guests) === Number(housingGuests.value);
-  const filterFeatures = () => {
-    const featureArray = Array.from(mapFilters.querySelectorAll('[name="features"]:checked'));
-    if (!popup.offer.features && featureArray.length === 0) {
-      return false;
-    }
-    return featureArray.every((index) => popup.offer.features.includes(index));
-  };
-
-  const renderOffer = (popup) => {
-    mapFilter.addEventListener('change', (evt) => {
-
-    });
   }
+  return featureArray.every((value) => popup.offer.features.includes(value));
 };
-*/
+
+const getFilteredOffers  = (offer) => {
+  mapFilters.addEventListener('change', debounce(() => {
+    const getOffers = offer.filter((popup) =>
+      filterType(popup)
+      && filterPrice(popup)
+      && filterRooms(popup)
+      && filterGuests(popup)
+      && filterFeatures(popup));
+    clearMarkerGroup();
+    createMarker(getOffers.slice(0, COUNT_OFFER));
+  },
+  ));
+};
+
+export { getFilteredOffers};

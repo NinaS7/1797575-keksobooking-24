@@ -196,4 +196,4 @@ const setUserFormSubmit = () => {
   });
 };
 
-export {adForm, getPageActive, setUserFormSubmit, doReset, showAlert};
+export {adForm, mapFilters, getPageActive, setUserFormSubmit, doReset, showAlert};
