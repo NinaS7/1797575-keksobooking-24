@@ -1,6 +1,10 @@
+import {sendData} from './api.js';
+import {clearMap} from './map.js';
+
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const MAX_ROOMS = 100;
+const ALERT_SHOW_TIME = 5000;
 
 const MIN_PRICE_TYPES = {
   bungalow: '0',
@@ -19,6 +23,9 @@ const roomNumber = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
 const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
+const successTemplate = document.querySelector('#success').content.querySelector('.success');
+const errorTemplate = document.querySelector('#error').content.querySelector('.error');
+const resetButton = adForm.querySelector('.ad-form__reset');
 
 const getPageDisabled = () => {
   adForm.classList.add('ad-form--disabled');
@@ -47,6 +54,8 @@ const getPageActive = () => {
     children.removeAttribute('disabled', 'disabled');
   });
 };
+
+getPageDisabled();
 
 titleInput.addEventListener('input', () => {
   titleInput.setCustomValidity('');
@@ -112,4 +121,73 @@ timeOut.addEventListener('change', () => {
   timeIn.value = timeOut.value;
 });
 
-export {getPageDisabled, adForm, mapFilters, getPageActive};
+const onSuccessMessege = () => {
+  const successMessage = successTemplate.cloneNode(true);
+  document.body.appendChild(successMessage);
+  successMessage.addEventListener('click', () => {
+    successMessage.remove();
+  });
+  document.addEventListener('keydown', (evt) => {
+    evt.preventDefault();
+    if (evt.key === 'Escape') {
+      successMessage.remove();
+    }
+  });
+};
+
+const onErrorMessege = () => {
+  const errorMessage = errorTemplate.cloneNode(true);
+  document.body.appendChild(errorMessage);
+  errorMessage.addEventListener('click', () => {
+    errorMessage.remove();
+  });
+  document.addEventListener('keydown', (evt) => {
+    evt.preventDefault();
+    if (evt.key === 'Escape') {
+      errorMessage.remove();
+    }
+  });
+};
+
+const showAlert = (message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = 100;
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = 0;
+  alertContainer.style.top = 0;
+  alertContainer.style.right = 0;
+  alertContainer.style.padding = '10px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'red';
+
+  alertContainer.textContent = message;
+
+  document.body.appendChild(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
+  return alertContainer;
+};
+
+const doReset = () => {
+  resetButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    adForm.reset();
+    clearMap();
+  });
+};
+
+const setUserFormSubmit = () => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    sendData(
+      () => onSuccessMessege(),
+      () =>  onErrorMessege(),
+      new FormData(evt.target),
+    );
+  });
+};
+
+export {adForm, getPageActive, setUserFormSubmit, doReset, showAlert};

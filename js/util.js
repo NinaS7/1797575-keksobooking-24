@@ -29,4 +29,13 @@ const getRandomFloatRange = function (min, max, fraction) {
 
 const getRandomArrayElement = (elements) => elements[getRandomIntRange(0, elements.length - 1)];
 
-export {getRandomIntRange, getRandomFloatRange, getRandomArrayElement};
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+export {getRandomIntRange, getRandomFloatRange, getRandomArrayElement, debounce};
