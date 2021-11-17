@@ -1,4 +1,4 @@
-//import { showAlert } from './form.js';
+import { showAlert } from './form.js';
 
 const getData = (onSuccess, onFail) => {
   fetch('https://24.javascript.pages.academy/keksobooking/data')
@@ -11,10 +11,10 @@ const getData = (onSuccess, onFail) => {
     })
     .then((data) => {
       onSuccess(data);
+    })
+    .catch(() => {
+      showAlert('Не удалось загрузить данные! Попробуйте перезагрузить страницу.');
     });
-  //.catch(() => {
-  //  showAlert('Не удалось загрузить данные! Попробуйте перезагрузить страницу.');
-  //});
 };
 
 const sendData = (onSuccess, onFail, body) => {
