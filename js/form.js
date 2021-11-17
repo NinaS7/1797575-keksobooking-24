@@ -1,5 +1,5 @@
 import {sendData} from './api.js';
-import {clearMap} from './map.js';
+import {clearMap, clearMarkerGroup} from './map.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -174,6 +174,7 @@ const showAlert = (message) => {
 const clear = () => {
   adForm.reset();
   mapFilters.reset();
+  clearMarkerGroup();
   getMinPrice();
   clearMap();
 };
