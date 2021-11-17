@@ -1,8 +1,7 @@
 import { popupTemplate } from './popup.js';
-import { adForm, getPageActive, getPageDisabled } from './form.js';
-//import {similarAdvertisements} from './data.js';
+import { adForm} from './form.js';
 
-const ZOOM = 10;
+const ZOOM = 12;
 const COMMA_OUT = 5;
 
 const START_LOCATION = {
@@ -23,12 +22,9 @@ const MARKER_ICON = {
 };
 
 const inputAddress = adForm.querySelector('#address');
-const resetButton = adForm.querySelector('.ad-form__reset');
 
-getPageDisabled();
 const map = L.map('map-canvas')
   .on('load', () => {
-    getPageActive();
     inputAddress.value = `${START_LOCATION.lat},${START_LOCATION.lng}`;
   })
   .setView( START_LOCATION, ZOOM);
@@ -59,8 +55,10 @@ mainPinMarker.on('moveend', (evt) => {
 
 const markerGroup = L.layerGroup().addTo(map);
 
-const createMarker = (similarAdvertisements) => {
-  similarAdvertisements.forEach((point) => {
+const clearMarkerGroup = () => markerGroup.clearLayers();
+
+const createMarker = (points) => {
+  points.forEach((point) => {
     const { lat, lng } = point.location;
     const icon = L.icon(MARKER_ICON);
 
@@ -77,13 +75,11 @@ const createMarker = (similarAdvertisements) => {
   });
 };
 
-const doReset = () => {
-  resetButton.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    mainPinMarker.setLatLng(START_LOCATION);
-    inputAddress.value = `${START_LOCATION.lat},${START_LOCATION.lng}`;
-    map.setView( START_LOCATION, ZOOM);
-  });
+const clearMap = () => {
+  mainPinMarker.setLatLng(START_LOCATION);
+  inputAddress.value = `${START_LOCATION.lat},${START_LOCATION.lng}`;
+  map.setView(START_LOCATION, ZOOM);
+  map.closePopup();
 };
 
-export { doReset, createMarker };
+export { clearMap, createMarker, clearMarkerGroup};
