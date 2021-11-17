@@ -171,11 +171,17 @@ const showAlert = (message) => {
   return alertContainer;
 };
 
+const clear = () => {
+  adForm.reset();
+  mapFilters.reset();
+  getMinPrice();
+  clearMap();
+};
+
 const doReset = () => {
   resetButton.addEventListener('click', (evt) => {
     evt.preventDefault();
-    adForm.reset();
-    clearMap();
+    clear();
   });
 };
 
@@ -183,7 +189,7 @@ const setUserFormSubmit = () => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     sendData(
-      () => onSuccessMessege(),
+      () => onSuccessMessege(clear()),
       () =>  onErrorMessege(),
       new FormData(evt.target),
     );

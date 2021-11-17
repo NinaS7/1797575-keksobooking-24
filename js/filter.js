@@ -15,32 +15,33 @@ const PriceRange = {
   high: 50000,
 };
 
-const getFilterOffer = (offer) => {
-  const filterType = () => housingType.value === DEFAULT_VALUE && housingType.value === offer.offer.type;
+const getFilterOffer = (popup) => {
+  const filterType = () => housingType.value === DEFAULT_VALUE && housingType.value === popup.offer.type;
   const filterPrice = () => {
-    if (offer.offer.price <= PriceRange.low) {
+    if (popup.offer.price <= PriceRange.low) {
       rangePrice = 'low';
-    } if (offer.offer.price > PriceRange.high) {
+    } if (popup.offer.price > PriceRange.high) {
       rangePrice = 'high';
     } else {
       rangePrice = 'middle';
     };
-    if (rangePrice.value !== DEFAULT_VALUE && housingPrice.value !== offer.offer.price) {
+    if (rangePrice.value !== DEFAULT_VALUE && housingPrice.value !== popup.offer.price) {
     return false;
   };
-  const filterRooms = () => housingRooms.value === DEFAULT_VALUE && Number(offer.offer.rooms) === Number(housingRooms.value);
-  const filterGuests = () => housingGuests.value === DEFAULT_VALUE || Number(card.offer.guests) === Number(housingGuests.value);
+  const filterRooms = () => housingRooms.value === DEFAULT_VALUE && Number(popup.offer.rooms) === Number(housingRooms.value);
+  const filterGuests = () => housingGuests.value === DEFAULT_VALUE && Number(popup.offer.guests) === Number(housingGuests.value);
   const filterFeatures = () => {
-    const CheckedFeatures = mapFilters.querySelectorAll('[name="features"]:checked');
-    const featureArray = Array.from(CheckedFeatures);
-    if (!offer.offer.features && featureArray.length === 0) {
+    const featureArray = Array.from(mapFilters.querySelectorAll('[name="features"]:checked'));
+    if (!popup.offer.features && featureArray.length === 0) {
       return false;
     }
-    return featureArray.every((index) => offer.offer.features.includes(index));
+    return featureArray.every((index) => popup.offer.features.includes(index));
   };
 
-  const renderOffer = (offer) => {
-    mapFilter.addEventListener('change', () => {
+  const renderOffer = (popup) => {
+    mapFilter.addEventListener('change', (evt) => {
 
+    });
+  }
 };
 */
