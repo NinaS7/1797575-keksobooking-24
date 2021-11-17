@@ -21,23 +21,23 @@ const housingPrice =  document.querySelector('#housing-price');
 const housingRooms =  document.querySelector('#housing-rooms');
 const housingGuests =  document.querySelector('#housing-guests');
 
-const filterType = (popup) => housingType.value === DEFAULT_VALUE && housingType.value === popup.offer.type;
+const filterType = (popup) => housingType.value === DEFAULT_VALUE || housingType.value === popup.offer.type;
 
 const filterPrice = (popup) => housingPrice.value === DEFAULT_VALUE
-  || PriceRange.low > popup.offer.price && housingPrice.value === PriceName.low
-  || PriceRange.low <= popup.offer.price && housingPrice.value === PriceName.middle && popup.offer.price < PriceName.high
-  || PriceRange.high <= popup.offer.price && housingPrice.value === PriceName.high;
+  || PriceRange.low > popup.offer.price
+  || PriceRange.low <= popup.offer.price < PriceName.high
+  || PriceRange.high <= popup.offer.price;
 
-const filterRooms = (popup) => housingRooms.value === DEFAULT_VALUE && Number(popup.offer.rooms) === Number(housingRooms.value);
+const filterRooms = (popup) => housingRooms.value === DEFAULT_VALUE || Number(popup.offer.rooms) === Number(housingRooms.value);
 
-const filterGuests = (popup) => housingGuests.value === DEFAULT_VALUE && Number(popup.offer.guests) === Number(housingGuests.value);
+const filterGuests = (popup) => housingGuests.value === DEFAULT_VALUE || Number(popup.offer.guests) === Number(housingGuests.value);
 
 const filterFeatures = (popup) => {
   const featureArray = Array.from(mapFilters.querySelectorAll('[name="features"]:checked'));
-  if (!popup.offer.features && featureArray.length === 0) {
+  if (!popup.offer.features) {
     return false;
   }
-  return featureArray.every((value) => popup.offer.features.includes(value));
+  return featureArray.every((index) => popup.offer.features.includes(index.value));
 };
 
 const getFilteredOffers  = (offer) => {
