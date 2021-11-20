@@ -1,4 +1,4 @@
-import { popupTemplate } from './popup.js';
+import { getpopupTemplate } from './popup.js';
 import { adForm} from './form.js';
 
 const ZOOM = 12;
@@ -71,7 +71,7 @@ const createMarker = (points) => {
     });
     marker
       .addTo(markerGroup)
-      .bindPopup(popupTemplate(point));
+      .bindPopup(getpopupTemplate(point));
   });
 };
 

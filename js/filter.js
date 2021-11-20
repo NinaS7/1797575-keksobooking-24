@@ -6,14 +6,18 @@ const DEFAULT_VALUE = 'any';
 const COUNT_OFFER = 10;
 
 const PriceRange = {
-  low: 10000,
-  middle: 50000,
-};
-
-const PriceName = {
-  low: 'low',
-  middle: 'middle',
-  high: 'high',
+  low: {
+    min: 0,
+    max: 10000,
+  },
+  middle: {
+    min: 10000,
+    max: 50000,
+  },
+  high: {
+    min: 50000,
+    max: 1000000,
+  },
 };
 
 const housingType =  document.querySelector('#housing-type');
@@ -24,9 +28,8 @@ const housingGuests =  document.querySelector('#housing-guests');
 const filterType = (popup) => housingType.value === DEFAULT_VALUE || housingType.value === popup.offer.type;
 
 const filterPrice = (popup) => housingPrice.value === DEFAULT_VALUE
-  || PriceRange.low > popup.offer.price
-  || PriceRange.low <= popup.offer.price < PriceName.high
-  || PriceRange.high <= popup.offer.price;
+
+|| popup.offer.price >= PriceRange[housingPrice.value].min && popup.offer.price < PriceRange[housingPrice.value].max;
 
 const filterRooms = (popup) => housingRooms.value === DEFAULT_VALUE || Number(popup.offer.rooms) === Number(housingRooms.value);
 

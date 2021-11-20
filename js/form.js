@@ -1,10 +1,10 @@
 import {sendData} from './api.js';
 import {clearMap, clearMarkerGroup} from './map.js';
+import { deletePictures } from './load-photos.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const MAX_ROOMS = 100;
-const ALERT_SHOW_TIME = 5000;
 
 const MIN_PRICE_TYPES = {
   bungalow: '0',
@@ -47,11 +47,11 @@ const getPageActive = () => {
 
   const adFormChildrens = Array.from(adForm.children);
   adFormChildrens.forEach((children) => {
-    children.removeAttribute('disabled', 'disabled');
+    children.removeAttribute('disabled');
   });
   const mapFiltersChildrens = Array.from(mapFilters.children);
   mapFiltersChildrens.forEach((children) => {
-    children.removeAttribute('disabled', 'disabled');
+    children.removeAttribute('disabled');
   });
 };
 
@@ -72,7 +72,7 @@ const getMinPrice = () => {
   price.placeholder = MIN_PRICE_TYPES[type.value];
 };
 
-type.addEventListener('change', () => {
+const getValidityPrice = () => {
   price.setCustomValidity('');
   getMinPrice();
   if (Number(price.value) < Number(MIN_PRICE_TYPES[type.value])) {
@@ -81,16 +81,14 @@ type.addEventListener('change', () => {
     price.setCustomValidity(`Цена не должна превышать ${price.max}`);
   }
   price.reportValidity();
+};
+
+type.addEventListener('change', () => {
+  getValidityPrice();
 });
 
 price.addEventListener('input', () => {
-  price.setCustomValidity('');
-  if (Number(price.value) < Number(MIN_PRICE_TYPES[type.value])) {
-    price.setCustomValidity(`Минимальная цена для выбранного типа жилья должна быть не менее ${MIN_PRICE_TYPES[type.value]} ₽/ночь`);
-  } if (Number(price.value) > Number(price.max)) {
-    price.setCustomValidity(`Цена не должна превышать ${price.max}`);
-  }
-  price.reportValidity();
+  getValidityPrice();
 });
 
 roomNumber.addEventListener('change', () => {
@@ -121,54 +119,27 @@ timeOut.addEventListener('change', () => {
   timeIn.value = timeOut.value;
 });
 
-const onSuccessMessege = () => {
+const onMessage = (element) => {
+  document.body.appendChild(element);
+  element.addEventListener('click', () => {
+    element.remove();
+  });
+  document.addEventListener('keydown', (evt) => {
+    evt.preventDefault();
+    if (evt.key === 'Escape') {
+      element.remove();
+    }
+  });
+};
+
+const onSuccessMessage = () => {
   const successMessage = successTemplate.cloneNode(true);
-  document.body.appendChild(successMessage);
-  successMessage.addEventListener('click', () => {
-    successMessage.remove();
-  });
-  document.addEventListener('keydown', (evt) => {
-    evt.preventDefault();
-    if (evt.key === 'Escape') {
-      successMessage.remove();
-    }
-  });
+  onMessage(successMessage);
 };
 
-const onErrorMessege = () => {
+const onErrorMessage = () => {
   const errorMessage = errorTemplate.cloneNode(true);
-  document.body.appendChild(errorMessage);
-  errorMessage.addEventListener('click', () => {
-    errorMessage.remove();
-  });
-  document.addEventListener('keydown', (evt) => {
-    evt.preventDefault();
-    if (evt.key === 'Escape') {
-      errorMessage.remove();
-    }
-  });
-};
-
-const showAlert = (message) => {
-  const alertContainer = document.createElement('div');
-  alertContainer.style.zIndex = 100;
-  alertContainer.style.position = 'absolute';
-  alertContainer.style.left = 0;
-  alertContainer.style.top = 0;
-  alertContainer.style.right = 0;
-  alertContainer.style.padding = '10px 3px';
-  alertContainer.style.fontSize = '30px';
-  alertContainer.style.textAlign = 'center';
-  alertContainer.style.backgroundColor = 'red';
-
-  alertContainer.textContent = message;
-
-  document.body.appendChild(alertContainer);
-
-  setTimeout(() => {
-    alertContainer.remove();
-  }, ALERT_SHOW_TIME);
-  return alertContainer;
+  onMessage(errorMessage);
 };
 
 const clear = () => {
@@ -177,6 +148,7 @@ const clear = () => {
   clearMarkerGroup();
   getMinPrice();
   clearMap();
+  deletePictures();
 };
 
 const doReset = () => {
@@ -190,11 +162,11 @@ const setUserFormSubmit = () => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     sendData(
-      () => onSuccessMessege(clear()),
-      () =>  onErrorMessege(),
+      () => onSuccessMessage(clear()),
+      () =>  onErrorMessage(),
       new FormData(evt.target),
     );
   });
 };
 
-export {adForm, mapFilters, getPageActive, setUserFormSubmit, doReset, showAlert};
+export {adForm, mapFilters, getPageActive, setUserFormSubmit, doReset};

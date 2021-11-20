@@ -11,7 +11,7 @@ const typePlaces = {
 
 const similarAdTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-const popupTemplate = (popup) => {
+const getpopupTemplate = (popup) => {
   const adElement = similarAdTemplate.cloneNode(true);
   if (popup.author.avatar) {
     adElement.querySelector('.popup__avatar').src = popup.author.avatar;
@@ -93,4 +93,4 @@ const popupTemplate = (popup) => {
   return adElement;
 };
 
-export { popupTemplate };
+export { getpopupTemplate };
